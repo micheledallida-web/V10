@@ -2,8 +2,8 @@
 "use client";
 
 import { useState } from "react";
-import { Zap, Layout, Server, Database, ShieldCheck, Cpu, Check } from "lucide-react";
-import { createClient } from "@/utils/supabase/client";
+import { Zap, Layout, Server } from "lucide-react";
+import { createClientBrowser } from "@/lib/supabase";
 
 const FEATURES = [
   { icon: Zap, title: "AI Full Stack Generation", desc: "Generate interfaces, databases, APIs, and authentication dynamically." },
@@ -20,26 +20,31 @@ export default function LandingPage() {
     e.preventDefault();
     setLoading(true);
     setMessage("");
-    
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
 
-    setLoading(false);
-    if (error) {
-      setMessage(`Error: ${error.message}`);
-    } else {
-      setMessage("Success! Check your inbox for the magic access link.");
+    try {
+      const supabase = createClientBrowser();
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) {
+        setMessage(`Error: ${error.message}`);
+      } else {
+        setMessage("Success! Check your inbox for the magic access link.");
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Unexpected error";
+      setMessage(`Error: ${msg}`);
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
     <div className="space-y-32 pb-32">
-      
       {/* HERO SECTION */}
       <section className="min-h-[80vh] flex flex-col items-center justify-center px-6 text-center max-w-4xl mx-auto pt-16">
         <div className="inline-block px-3 py-1 bg-[#8EF08A]/10 border border-[#8EF08A]/30 rounded-full text-xs font-semibold text-[#8EF08A] uppercase tracking-wider mb-6">
@@ -94,7 +99,6 @@ export default function LandingPage() {
           ))}
         </div>
       </section>
-
     </div>
   );
 }
