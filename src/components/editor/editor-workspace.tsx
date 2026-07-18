@@ -16,7 +16,9 @@ export function EditorWorkspace({ projectId }: { projectId: string }) {
   const [deployStatus, setDeployStatus] = useState('Preview deploy is idle.');
 
   useEffect(() => {
-    history.reset(generatedHtml);
+    if (generatedHtml !== history.value) {
+      history.push(generatedHtml);
+    }
   }, [generatedHtml, history]);
 
   useEffect(() => {
@@ -32,11 +34,13 @@ export function EditorWorkspace({ projectId }: { projectId: string }) {
   }, [deployStatus, isStreaming]);
 
   const handleDeploy = async () => {
-    const token = process.env.NEXT_PUBLIC_VERCEL_API_TOKEN;
-    const teamId = process.env.NEXT_PUBLIC_VERCEL_TEAM_ID;
-    const vercelProjectId = process.env.NEXT_PUBLIC_VERCEL_PROJECT_ID;
+    const deployRequest = {
+      projectId,
+      meta: { sourceProjectId: projectId },
+      token: 'server-side-token-required',
+    };
 
-    if (!token || !vercelProjectId) {
+    if (deployRequest.token === 'server-side-token-required') {
       setDeployStatus('TODO: move deploy action behind a secure server-side Vercel token flow.');
       return;
     }
@@ -46,7 +50,7 @@ export function EditorWorkspace({ projectId }: { projectId: string }) {
 
     try {
       // TODO: replace client-side invocation with a server action or API route that holds the Vercel token securely.
-      const response = await triggerVercelDeploy({ projectId: vercelProjectId, teamId, token, meta: { sourceProjectId: projectId } });
+      const response = await triggerVercelDeploy(deployRequest);
       setDeployStatus(response.url ? `Deployment queued at ${response.url}` : `Deployment ${response.id} created.`);
     } catch (error) {
       setDeployStatus(error instanceof Error ? error.message : 'Unknown deployment error');

@@ -1,5 +1,6 @@
 'use client';
 
+import type { Dispatch, ReactNode, SetStateAction } from 'react';
 import { createContext, useContext, useMemo, useState } from 'react';
 
 type EditorContextValue = {
@@ -8,10 +9,10 @@ type EditorContextValue = {
   generatedCode: string;
   isStreaming: boolean;
   activeSelection: string | null;
-  setGeneratedHtml: (value: string) => void;
-  setGeneratedCode: (value: string) => void;
-  setIsStreaming: (value: boolean) => void;
-  setActiveSelection: (value: string | null) => void;
+  setGeneratedHtml: Dispatch<SetStateAction<string>>;
+  setGeneratedCode: Dispatch<SetStateAction<string>>;
+  setIsStreaming: Dispatch<SetStateAction<boolean>>;
+  setActiveSelection: Dispatch<SetStateAction<string | null>>;
 };
 
 const defaultHtml = `
@@ -28,7 +29,7 @@ const defaultCode = `<section className=\"hero\">\n  <h1>Project scaffold is rea
 
 const EditorContext = createContext<EditorContextValue | null>(null);
 
-export function EditorContextProvider({ children, projectId }: { children: React.ReactNode; projectId: string }) {
+export function EditorContextProvider({ children, projectId }: { children: ReactNode; projectId: string }) {
   const [generatedHtml, setGeneratedHtml] = useState(defaultHtml);
   const [generatedCode, setGeneratedCode] = useState(defaultCode);
   const [isStreaming, setIsStreaming] = useState(false);

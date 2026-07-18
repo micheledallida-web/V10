@@ -21,4 +21,4 @@ The editor flow is scaffolded as:
 3. `editor-context` stores generated code/html and stream state.
 4. `canvas` renders the latest HTML through a sandboxed iframe preview.
 
-Environment variables are documented in `/home/runner/work/V10/V10/.env.local.example`.
+Environment variables are documented in `.env.local.example`.

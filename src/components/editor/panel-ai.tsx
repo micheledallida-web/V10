@@ -15,6 +15,7 @@ export function PanelAi({ streamEndpoint = '/api/ai/stream' }: PanelAiProps) {
 
   const handleGenerate = async () => {
     setIsStreaming(true);
+    setGeneratedCode('');
 
     await start({
       endpoint: streamEndpoint,
@@ -28,8 +29,6 @@ export function PanelAi({ streamEndpoint = '/api/ai/stream' }: PanelAiProps) {
         setIsStreaming(false);
       },
     });
-
-    setIsStreaming(false);
   };
 
   return (

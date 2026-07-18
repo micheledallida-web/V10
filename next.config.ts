@@ -13,11 +13,15 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'images.openai.com',
+      },
+      {
+        protocol: 'https',
         hostname: '*.public.blob.vercel-storage.com',
       },
       {
         protocol: 'https',
-        hostname: 'avatars.githubusercontent.com',
+        hostname: 'assets.vercel.com',
       },
     ],
   },
