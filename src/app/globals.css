@@ -4,6 +4,18 @@
   color-scheme: dark;
 }
 
+@theme {
+  --color-brandBg: #090909;
+  --color-brandSurface: #111111;
+  --color-brandSurfaceAccent: #1a1a1a;
+  --color-brandBorder: rgba(255, 255, 255, 0.08);
+  --color-brandGreen: #8ef08a;
+  --color-brandTextSec: #a1a1aa;
+
+  --radius-premium: 1.5rem;
+  --radius-pill: 9999px;
+}
+
 body {
   min-height: 100vh;
   background: linear-gradient(180deg, #020617 0%, #0f172a 48%, #111827 100%);
