@@ -2,10 +2,8 @@
 "use client";
 
 import { useState } from "react";
-import { X, Mail, SmartPhone } from "lucide-react";
+import { X, Mail, Smartphone } from "lucide-react"; // Note: lucide-react uses Smartphone lowercased, not SmartPhone
 
-// NOTE: These placeholder components handle the layout. 
-// If you want to use your full Three.js logic later, you can import it here.
 function Q3DCanvasPlaceholder() {
   return (
     <div className="w-16 h-16 rounded-full border border-[#8EF08A]/30 bg-[#8EF08A]/10 flex items-center justify-center animate-spin [animation-duration:8s]">
@@ -32,10 +30,10 @@ export default function AuthenticModal({ isOpen, onClose }: AuthModalProps) {
       {/* Container matching the clean glass structure from your design */}
       <div className="bg-[#0c0c0c] w-full max-w-md rounded-t-[2rem] sm:rounded-[2rem] p-8 relative border border-white/10 shadow-2xl overflow-y-auto max-h-[95vh]">
         
-        {/* Close Button Cross */}
+        {/* Close Button Cross - Shifted to Right-6 to protect typography layout boundaries */}
         <button
           onClick={onClose}
-          className="absolute top-6 left-6 text-zinc-500 hover:text-white transition-colors p-1"
+          className="absolute top-6 right-6 text-zinc-500 hover:text-white transition-colors p-1"
           aria-label="Close modal"
         >
           <X className="w-6 h-6" />
@@ -47,7 +45,7 @@ export default function AuthenticModal({ isOpen, onClose }: AuthModalProps) {
         </div>
 
         {/* 2. Headline Core */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 px-2">
           <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white leading-tight">
             Build Full-Stack <br />
             <span className="text-[#8EF08A]">Web & Mobile Apps</span> in minutes
@@ -60,8 +58,24 @@ export default function AuthenticModal({ isOpen, onClose }: AuthModalProps) {
             onClick={() => handleOAuthLogin("Google")}
             className="w-full inline-flex items-center justify-center gap-3 bg-white text-black py-3.5 px-6 rounded-full text-base font-semibold transition-all hover:bg-zinc-200 active:scale-[0.99] shadow-md"
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24">
-              <path fill="#EA4335" d="M12.24 10.285V14.4h6.887c-.648 2.41-2.519 4.114-5.136 4.114-3.466 0-6.277-2.81-6.277-6.277 0-3.466 2.81-6.277 6.277-6.277 1.493 0 2.86.52 3.938 1.387l3.076-3.077C18.99 1.94 15.82 1 12.24 1 6.033 1 12.24 1 12.24 12.24s5.033 11.24 11.24 11.24c5.842 0 10.94-4.143 10.94-11.24 0-.668-.063-1.353-.186-1.955H12.24z"/>
+            {/* Authentically painted multi-color corporate asset vector matrix */}
+            <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
+              <path
+                fill="#4285F4"
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+              />
+              <path
+                fill="#34A853"
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+              />
+              <path
+                fill="#EA4335"
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+              />
             </svg>
             <span>Continue with Google</span>
           </button>
@@ -70,21 +84,21 @@ export default function AuthenticModal({ isOpen, onClose }: AuthModalProps) {
           <div className="grid grid-cols-3 gap-3">
             <button
               onClick={() => handleOAuthLogin("GitHub")}
-              className="inline-flex items-center justify-center py-3.5 bg-zinc-900 border border-white/10 rounded-full hover:bg-zinc-800 transition-all text-white font-bold text-sm"
+              className="inline-flex items-center justify-center py-3.5 bg-zinc-900 border border-white/10 rounded-full hover:bg-zinc-800 active:scale-[0.98] transition-all text-white font-bold text-sm"
             >
               GitHub
             </button>
 
             <button
               onClick={() => handleOAuthLogin("Apple")}
-              className="inline-flex items-center justify-center py-3.5 bg-zinc-900 border border-white/10 rounded-full hover:bg-zinc-800 transition-all text-white font-bold text-sm"
+              className="inline-flex items-center justify-center py-3.5 bg-zinc-900 border border-white/10 rounded-full hover:bg-zinc-800 active:scale-[0.98] transition-all text-white font-bold text-sm"
             >
               Apple
             </button>
 
             <button
               onClick={() => handleOAuthLogin("Facebook")}
-              className="inline-flex items-center justify-center py-3.5 bg-zinc-900 border border-white/10 rounded-full hover:bg-zinc-800 transition-all text-white font-bold text-sm"
+              className="inline-flex items-center justify-center py-3.5 bg-zinc-900 border border-white/10 rounded-full hover:bg-zinc-800 active:scale-[0.98] transition-all text-white font-bold text-sm"
             >
               Facebook
             </button>
@@ -110,7 +124,7 @@ export default function AuthenticModal({ isOpen, onClose }: AuthModalProps) {
             onClick={() => alert("Phone verification active.")}
             className="w-full inline-flex items-center justify-center gap-3 bg-zinc-900/50 hover:bg-zinc-900 border border-white/5 py-3.5 px-6 rounded-full text-sm font-medium transition-all text-zinc-300"
           >
-            <SmartPhone className="w-4 h-4 text-zinc-500" />
+            <Smartphone className="w-4 h-4 text-zinc-500" />
             <span>Continue with Phone</span>
           </button>
         </div>
