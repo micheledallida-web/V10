@@ -1,13 +1,1 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  reactStrictMode: true,
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: false,
-  }
-};
-
-export default nextConfig;
+// This file has been deactivated and replaced by next.config.mjs to prevent Vercel build compilation errors.
