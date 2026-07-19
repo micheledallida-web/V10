@@ -1,5 +1,5 @@
 import React from 'react';
-import { Hero, Features } from '@/components/Hero';
+import { Hero, Features } from '@/app/Hero';
 
 function Reveal({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
