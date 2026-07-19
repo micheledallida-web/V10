@@ -59,8 +59,9 @@ function ParticleCanvas() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const canvasEl = canvasRef.current;
+    if (!canvasEl) return;
+    const canvas = canvasEl;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     let animationId = 0;
@@ -342,39 +343,6 @@ const TECH_TAGS = [
   "GitHub Integration", "One Click Deploy",
 ];
 
-const WORKFLOW_STEPS = [
-  { n: 1, title: "Describe Your Idea", desc: "Input your raw project thoughts. State your goals, user flows, and tech stacks using everyday english." },
-  { n: 2, title: "Architecture Plan", desc: "AI analyzes requirement parameters to model structural tables, security measures, and navigation states." },
-  { n: 3, title: "Synchronous Build", desc: "Our core models write high-fidelity frontend layouts, connect microservices, and provision backend resources." },
-  { n: 4, title: "Instantly Deploy", desc: "Compiled builds are provisioned instantly onto secure Vercel/AWS edge containers with active tracking." },
-];
-
-const TESTIMONIALS = [
-  { initial: "A", quote: "QuickStart.Ai helped me build a fully functional, Stripe-connected dashboard app in literally 15 minutes. The code generated is production grade.", name: "Alex Rivera", role: "CTO, Vertex Analytics" },
-  { initial: "M", quote: "The rotating 3D interface feels premium. I easily connected our supabase Postgres instances directly with the built-in database model agent.", name: "Marcus Chen", role: "Senior Architect, Vercel Core" },
-  { initial: "E", quote: "I literally don't write boilerplate auth scripts or API routes from scratch anymore. Using natural language saves hours of system design time.", name: "Elena Rostova", role: "Lead Engineer, Retool Inc" },
-  { initial: "S", quote: "Absolutely incredible UI outputs. Responsive scaling models automatically worked perfectly across both my iPad and desktop setups.", name: "Sarah Jenkins", role: "Fullstack Engineer, Supabase" },
-];
-
-const FAQS = [
-  {
-    q: "What frameworks does QuickStart.Ai output?",
-    a: "QuickStart.Ai natively compiles complete applications using Next.js 15, React 19, TypeScript, and Tailwind CSS. Mobile setups are exported using standard Flutter or React Native structures, connecting to backends like Supabase, Firebase, or clean PostgreSQL databases.",
-  },
-  {
-    q: "Can I export and self-host the code?",
-    a: "Absolutely. Your built code is 100% proprietary to you. You can push direct repositories to your private GitHub or export the standard build files with zero vendor locks.",
-  },
-  {
-    q: "How are databases and authentication managed?",
-    a: "AI models spin up secure, isolated schema tables linked natively to PostgreSQL, Supabase or Firebase instances. Security controls, multi-factor login policies, passkeys, and dynamic roles are integrated perfectly with secure sessions from day one.",
-  },
-  {
-    q: "Does QuickStart.Ai integrate with external web APIs?",
-    a: "Yes. You can instruct the builder to map specific API integrations. This includes CRM synchronizations, Stripe payment gateways, external database instances, vector tools, or automated custom webhooks.",
-  },
-];
-
 function AuthButton({ provider, className, children }: { provider: string; className: string; children: React.ReactNode }) {
   const [loading, setLoading] = useState(false);
 
@@ -391,30 +359,6 @@ function AuthButton({ provider, className, children }: { provider: string; class
       {loading ? (
         <>
           <span className="btn-spinner mr-2" /> Authorization Pending...
-        </>
-      ) : (
-        children
-      )}
-    </button>
-  );
-}
-
-function PricingButton({ tier, className, children }: { tier: string; className: string; children: React.ReactNode }) {
-  const [loading, setLoading] = useState(false);
-
-  function handleClick() {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      alert(`Selected the ${tier} plan. (placeholder — wire up checkout/signup flow here)`);
-    }, 1600);
-  }
-
-  return (
-    <button onClick={handleClick} disabled={loading} className={className}>
-      {loading ? (
-        <>
-          <span className="btn-spinner mr-2" /> Allocating node server...
         </>
       ) : (
         children
