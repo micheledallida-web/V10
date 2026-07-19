@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import LoginModal from "./LoginModal";
 import {
   Zap,
   Layout,
@@ -320,15 +321,15 @@ function CustomCursor() {
 }
 
 const FEATURES = [
-  { icon: Zap, title: "AI Full Stack Generation", desc: "Generate user-interfaces, structural databases, route endpoints, third-party authentication protocols, and edge APIs dynamically from one single baseline prompt.", tag: "Autonomous Architecture" },
-  { icon: Layout, title: "Frontend Engine", desc: "Beautiful layouts compiled using Next.js 15, Tailwind, and React 19. Perfectly customized components natively designed to match standard screen resolutions dynamically.", tag: "Next.js 15 & React 19" },
-  { icon: Server, title: "Sovereign Backend", desc: "Engineered Node.js, Express, and Serverless API structures. Type-safe routing controls, absolute payload validations, dynamic load balancing, and secure headers.", tag: "Type-safe endpoints" },
-  { icon: Database, title: "Database Integration", desc: "Structured SQL/NoSQL schema schemas automatically constructed. Deep-link models to Supabase, Postgres, Firebase, or complex remote Vector Databases.", tag: "PostgreSQL & Supabase" },
-  { icon: ShieldCheck, title: "Enterprise Authentication", desc: "Out-of-the-box user management. Integrate secure multi-factor MFA, JSON Web Tokens (JWT), biometric passkeys, NextAuth setups, or OAuth profiles seamlessly.", tag: "Zero-trust security" },
-  { icon: Cpu, title: "AI Agents & Workflows", desc: "Embed complex autonomous systems into your software application. Orchestrate background processors, webhooks, Vector memory searches, and Stripe-enabled actions.", tag: "Autonomous workflows" },
+  { icon: Zap, title: "AI Full Stack Generation", desc: "Generate user-interfaces, structural databases, route endpoints, third-party authentication protocols, and edge APIs dynamically from one prompt in seconds." },
+  { icon: Layout, title: "Frontend Engine", desc: "Beautiful layouts compiled using Next.js 15, Tailwind, and React 19. Perfectly customized components natively designed to match standard screen dimensions." },
+  { icon: Server, title: "Sovereign Backend", desc: "Engineered Node.js, Express, and Serverless API structures. Type-safe routing controls, absolute payload validations, dynamic load balancing, and secure middleware generated for production." },
+  { icon: Database, title: "Database Integration", desc: "Structured SQL/NoSQL schema schemas automatically constructed. Deep-link models to Supabase, Postgres, Firebase, or complex remote Vector storage memory systems effortlessly." },
+  { icon: ShieldCheck, title: "Enterprise Authentication", desc: "Out-of-the-box user management. Integrate secure multi-factor MFA, JSON Web Tokens (JWT), biometric passkeys, NextAuth setups, or social OAuth pipelines instantly." },
+  { icon: Cpu, title: "AI Agents & Workflows", desc: "Embed complex autonomous systems into your software application. Orchestrate background processors, webhooks, Vector memory searches, and Stripe billing agents rapidly." },
 ];
 
-const TECH_TAGS = ["React", "Next.js", "Flutter", "React Native", "Supabase", "Firebase", "Stripe", "PostgreSQL", "Vector Databases", "File Storage", "Cloud Functions", "GitHub Integration", "One Click Deploy"];
+const TECH_TAGS = ["React", "Next.js", "Flutter", "React Native", "Supabase", "Firebase", "Stripe", "PostgreSQL", "Vector Databases", "File Storage", "Cloud Functions", "GitHub Integration", "One-Click Deploy"];
 
 function AuthButton({ provider, className, children }: { provider: string; className: string; children: React.ReactNode }) {
   const [loading, setLoading] = useState(false);
@@ -372,8 +373,8 @@ function AuthModal({ id, title, description, type, placeholder, isOpen, onClose 
         <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
         <p className="text-brandTextSec text-sm mb-6">{description}</p>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input type={type} required placeholder={placeholder} className="w-full bg-brandSurfaceAccent border border-brandBorder rounded-pill py-3 px-5 text-sm text-white placeholder-brandTextSec focus:outline-none focus:border-brandGreen focus:ring-1 focus:ring-brandGreen/30 transition-all duration-300" />
-          <button type="submit" disabled={loading} className="w-full py-3 px-6 bg-brandGreen text-black font-bold rounded-pill text-sm transition-all duration-300 hover:scale-[1.01] hover:bg-white">
+          <input type={type} required placeholder={placeholder} className="w-full bg-brandSurfaceAccent border border-brandBorder rounded-pill py-3 px-5 text-sm text-white placeholder-brandTextSec focus:outline-none focus:border-brandGreen" />
+          <button type="submit" disabled={loading} className="w-full py-3 px-6 bg-brandGreen text-black font-bold rounded-pill text-sm transition-all duration-300 hover:scale-[1.01] hover:bg-white disabled:opacity-60 disabled:cursor-not-allowed">
             {loading ? "Sending..." : type === "email" ? "Send Magic Link" : "Send Code"}
           </button>
         </form>
@@ -385,6 +386,7 @@ function AuthModal({ id, title, description, type, placeholder, isOpen, onClose 
 export default function LandingPage() {
   const [emailModalOpen, setEmailModalOpen] = useState(false);
   const [phoneModalOpen, setPhoneModalOpen] = useState(false);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
 
   return (
     <div className="bg-brandBg text-white antialiased font-sans overflow-x-hidden selection:bg-brandGreen selection:text-black min-h-screen relative">
@@ -407,7 +409,9 @@ export default function LandingPage() {
             <a href="#pricing" className="hover:text-white transition-colors duration-200">Pricing</a>
             <a href="#faq" className="hover:text-white transition-colors duration-200">FAQ</a>
           </nav>
-          <a href="#signup" className="inline-flex items-center justify-center bg-white text-black px-6 py-2.5 rounded-pill text-sm font-semibold hover:bg-brandGreen transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-brandGreen/40 shadow-sm">Get Started</a>
+          <button onClick={() => setLoginModalOpen(true)} className="inline-flex items-center justify-center bg-white text-black px-6 py-2.5 rounded-pill text-sm font-semibold hover:bg-brandGreen transition-all duration-300">
+            Login
+          </button>
         </div>
       </header>
 
@@ -418,20 +422,20 @@ export default function LandingPage() {
           </div>
           <div className="max-w-4xl text-center mx-auto mt-6 z-20 reveal-element active">
             <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tighter leading-[1.05] text-white">Build Full-Stack<br /><span className="text-brandGreen">Web & Mobile Apps in Minutes</span></h1>
-            <p className="mt-6 text-lg md:text-xl text-brandTextSec max-w-2xl mx-auto leading-relaxed">Instantly generate native mobile applications, progressive web apps, production APIs, schema-perfect databases, authentication architectures, AI agents, secure cloud storage, and fully automated deployment configurations using simple natural language.</p>
+            <p className="mt-6 text-lg md:text-xl text-brandTextSec max-w-2xl mx-auto leading-relaxed">Instantly generate native mobile applications, progressive web apps, production APIs, schema-ready databases, authentication, and payment integrations from one prompt.</p>
           </div>
           <div id="signup" className="w-full max-w-md mx-auto mt-12 z-20 reveal-element active space-y-6">
-            <AuthButton provider="Google" className="w-full inline-flex items-center justify-center gap-3 bg-white text-black py-4 px-6 rounded-pill text-base font-semibold transition-all duration-300 hover:bg-brandGreen hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-brandGreen/40 shadow-lg group">
+            <AuthButton provider="Google" className="w-full inline-flex items-center justify-center gap-3 bg-white text-black py-4 px-6 rounded-pill text-base font-semibold transition-all duration-300 hover:bg-brandGreen hover:scale-[1.01]">
               <span>Continue with Google</span>
             </AuthButton>
             <div className="grid grid-cols-3 gap-3">
-              <AuthButton provider="GitHub" className="inline-flex items-center justify-center gap-2 py-3.5 px-3 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-medium transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-1 focus:ring-white/20"><Github className="w-4 h-4 text-brandGreen shrink-0" /><span>GitHub</span></AuthButton>
-              <AuthButton provider="Apple" className="inline-flex items-center justify-center gap-2 py-3.5 px-3 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-medium transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-1 focus:ring-white/20"><span>Apple</span></AuthButton>
-              <AuthButton provider="Facebook" className="inline-flex items-center justify-center gap-2 py-3.5 px-3 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-medium transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-1 focus:ring-white/20"><span>Facebook</span></AuthButton>
+              <AuthButton provider="GitHub" className="inline-flex items-center justify-center gap-2 py-3.5 px-3 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm text-white transition-colors duration-200"><Github className="w-4 h-4" /></AuthButton>
+              <AuthButton provider="Apple" className="inline-flex items-center justify-center gap-2 py-3.5 px-3 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm text-white transition-colors duration-200">Apple</AuthButton>
+              <AuthButton provider="Facebook" className="inline-flex items-center justify-center gap-2 py-3.5 px-3 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm text-white transition-colors duration-200">Facebook</AuthButton>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <button onClick={() => setEmailModalOpen(true)} className="inline-flex items-center justify-center py-4 px-5 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-semibold transition-all duration-300 hover:scale-[1.01] hover:border-brandGreen/40 focus:outline-none focus:ring-1 focus:ring-brandGreen/40">Continue with Email</button>
-              <button onClick={() => setPhoneModalOpen(true)} className="inline-flex items-center justify-center py-4 px-5 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-semibold transition-all duration-300 hover:scale-[1.01] hover:border-brandGreen/40 focus:outline-none focus:ring-1 focus:ring-brandGreen/40">Continue with Phone</button>
+              <button onClick={() => setEmailModalOpen(true)} className="inline-flex items-center justify-center py-4 px-5 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm text-white transition-colors duration-200">Continue with Email</button>
+              <button onClick={() => setPhoneModalOpen(true)} className="inline-flex items-center justify-center py-4 px-5 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm text-white transition-colors duration-200">Continue with Phone</button>
             </div>
           </div>
         </section>
@@ -439,19 +443,20 @@ export default function LandingPage() {
 
       <AuthModal id="email-modal" title="Continue with Email" description="Enter your email address to receive an instant access magic key." type="email" placeholder="name@company.com" isOpen={emailModalOpen} onClose={() => setEmailModalOpen(false)} />
       <AuthModal id="phone-modal" title="Continue with Phone" description="Enter your phone number to authorize with secure SMS OTP verification." type="tel" placeholder="+1 (555) 000-0000" isOpen={phoneModalOpen} onClose={() => setPhoneModalOpen(false)} />
+      <LoginModal isOpen={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
 
       <style>{`
-        .noise-bg { position: fixed; top: -50%; left: -50%; right: -50%; bottom: -50%; width: 200%; height: 200%; opacity: 0.8; pointer-events: none; z-index: 999; animation: noise-anim 0.2s infinite; }
-        @keyframes noise-anim { 0% { transform: translate(0,0) } 10% { transform: translate(-1%,-1%) } 20% { transform: translate(-2%,1%) } 30% { transform: translate(1%,-2%) } 40% { transform: translate(-1%,3%) } 50% { transform: translate(-1%,1%) } 60% { transform: translate(3%,-1%) } 70% { transform: translate(2%,1%) } 80% { transform: translate(-2%,-1%) } 90% { transform: translate(1%,3%) } 100% { transform: translate(1%,-2%) } }
+        .noise-bg { position: fixed; top: -50%; left: -50%; right: -50%; bottom: -50%; width: 200%; height: 200%; opacity: 0.8; pointer-events: none; z-index: 999; animation: noise-anim 0.2s infinite; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); }
+        @keyframes noise-anim { 0% { transform: translate(0,0) } 10% { transform: translate(-1%,-1%) } 20% { transform: translate(-2%,1%) } 30% { transform: translate(1%,-2%) } 40% { transform: translate(-1%,3%) } 50% { transform: translate(-2%,1%) } 60% { transform: translate(3%,0) } 70% { transform: translate(0,2%) } 80% { transform: translate(-3%,0) } 90% { transform: translate(2%,1%) } 100% { transform: translate(1%,0) } }
         .radial-vignette { position: fixed; inset: 0; background: radial-gradient(circle at center, transparent 30%, rgba(9, 9, 9, 0.9) 100%); pointer-events: none; z-index: 10; }
-        .ambient-glow-1 { position: absolute; top: 15%; left: 20%; width: 45vw; height: 45vw; background: radial-gradient(circle, rgba(142, 240, 138, 0.03) 0%, transparent 70%); pointer-events: none; filter: blur(80px); z-index: 1; animation: slow-drift-1 25s infinite alternate ease-in-out; }
-        .ambient-glow-2 { position: absolute; bottom: 20%; right: 15%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, transparent 75%); pointer-events: none; filter: blur(100px); z-index: 1; animation: slow-drift-2 30s infinite alternate ease-in-out; }
+        .ambient-glow-1 { position: absolute; top: 15%; left: 20%; width: 45vw; height: 45vw; background: radial-gradient(circle, rgba(142, 240, 138, 0.03) 0%, transparent 70%); pointer-events: none; z-index: 1; animation: slow-drift-1 16s ease-in-out infinite alternate; }
+        .ambient-glow-2 { position: absolute; bottom: 20%; right: 15%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, transparent 75%); pointer-events: none; z-index: 1; animation: slow-drift-2 20s ease-in-out infinite alternate; }
         @keyframes slow-drift-1 { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, -40px) scale(1.1); } }
         @keyframes slow-drift-2 { 0% { transform: translate(0, 0) scale(1.1); } 100% { transform: translate(-60px, 50px) scale(0.9); } }
         .reveal-element { opacity: 0; transform: translateY(30px) scale(0.97); filter: blur(8px); transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal-element.active { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
         .glass-card { background: rgba(16, 16, 16, 0.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.06); }
-        #custom-cursor { width: 20px; height: 20px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 50%; position: fixed; transform: translate(-50%, -50%); pointer-events: none; z-index: 10000; transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s; display: none; }
+        #custom-cursor { width: 20px; height: 20px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 50%; position: fixed; transform: translate(-50%, -50%); pointer-events: none; z-index: 10000; transition: width 0.2s, height 0.2s, border-color 0.2s, background-color 0.2s; }
         @media (hover: hover) { #custom-cursor { display: block; } }
       `}</style>
     </div>
