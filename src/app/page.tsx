@@ -171,6 +171,7 @@ const FEATURES = [
 ];
 
 const TECH_TAGS = ["React", "Next.js", "Flutter", "React Native", "Supabase", "Firebase", "Stripe", "PostgreSQL", "Vector Databases", "File Storage", "Cloud Functions", "GitHub Integration", "One Click Deploy"];
+const AUTH_SIMULATION_DELAY_MS = 1800;
 
 function AuthButton({
   provider,
@@ -213,7 +214,7 @@ export default function LandingPage() {
   }
 
   async function handleProviderAuth(provider: string) {
-    await new Promise((resolve) => setTimeout(resolve, 1800));
+    await new Promise((resolve) => setTimeout(resolve, AUTH_SIMULATION_DELAY_MS));
     alert(`Authorization request with ${provider} completed. (placeholder — wire up Supabase OAuth here)`);
   }
 
