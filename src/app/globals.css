@@ -1,79 +1,125 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* ------------------------------------------------------------------ */
-/*  Design tokens — must match the classNames used in LandingPage.tsx  */
-/*  (brandBg, brandSurface, brandSurfaceAccent, brandBorder,           */
-/*   brandGreen, brandTextSec, rounded-pill, rounded-premium)          */
-/* ------------------------------------------------------------------ */
-@theme {
-  /* Backgrounds */
-  --color-brandBg: #090909;
-  --color-brandSurface: #101010;
-  --color-brandSurfaceAccent: #171717;
-
-  /* Borders */
-  --color-brandBorder: rgba(255, 255, 255, 0.08);
-
-  /* Accent */
-  --color-brandGreen: #8ef08a;
-
-  /* Text */
-  --color-brandTextSec: #a3a3a3;
-
-  /* Radii used as rounded-pill / rounded-premium utilities */
-  --radius-pill: 9999px;
-  --radius-premium: 1.75rem;
-
-  /* Font stacks */
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
-}
-
-/* ------------------------------------------------------------------ */
-/*  Base resets                                                        */
-/* ------------------------------------------------------------------ */
-html {
-  scroll-behavior: smooth;
-  color-scheme: dark;
+:root {
+  --brandBg: #050505;
+  --brandSurface: #0f0f0f;
+  --brandSurfaceAccent: #151515;
+  --brandBorder: rgba(255, 255, 255, 0.08);
+  --brandGreen: #8EF08A;
+  --brandTextSec: #a1a1aa;
 }
 
 body {
-  background-color: var(--color-brandBg);
+  background-color: var(--brandBg);
   color: #ffffff;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-::selection {
-  background-color: var(--color-brandGreen);
-  color: #000000;
+.bg-brandBg { background-color: var(--brandBg); }
+.bg-brandSurface { background-color: var(--brandSurface); }
+.bg-brandSurfaceAccent { background-color: var(--brandSurfaceAccent); }
+.border-brandBorder { border-color: var(--brandBorder); }
+.bg-brandGreen { background-color: var(--brandGreen); }
+.text-brandGreen { color: var(--brandGreen); }
+.text-brandTextSec { color: var(--brandTextSec); }
+.selection\:bg-brandGreen ::selection { background-color: var(--brandGreen); color: #000000; }
+.rounded-pill { border-radius: 9999px; }
+.rounded-premium { border-radius: 24px; }
+
+.glass-card {
+  background: rgba(16, 16, 16, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--brandBorder);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ------------------------------------------------------------------ */
-/*  Scrollbar — referenced by the <style> block inside LandingPage.tsx  */
-/*  but included here too so it applies site-wide, not just on that page */
-/* ------------------------------------------------------------------ */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #090909;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(142, 240, 138, 0.3);
+.glass-card:hover {
+  border-color: rgba(142, 240, 138, 0.3);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px -15px rgba(142, 240, 138, 0.12);
 }
 
-/* ------------------------------------------------------------------ */
-/*  Respect reduced-motion preferences                                  */
-/* ------------------------------------------------------------------ */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+.pro-glow-border {
+  position: relative;
+}
+
+.pro-glow-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 24px;
+  background: linear-gradient(90deg, transparent, rgba(142, 240, 138, 0.4), transparent);
+  z-index: -1;
+  background-size: 200% 100%;
+  animation: border-glow 4s linear infinite;
+}
+
+@keyframes border-glow {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.marquee-inner {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 35s linear infinite;
+}
+
+.marquee-inner:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.reveal-element {
+  opacity: 0;
+  transform: translateY(24px) scale(0.98);
+  filter: blur(4px);
+  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1), filter 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-element.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+.btn-spinner {
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top: 2px solid #ffffff;
+  border-radius: 50%;
+  width: 14px; height: 14px;
+  animation: spin-loop 0.8s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin-loop {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.workflow-glow-dot {
+  position: absolute;
+  inset: 0;
+  background: var(--brandGreen);
+  height: 1px;
+  width: 60px;
+  border-radius: 9999px;
+  box-shadow: 0 0 8px var(--brandGreen);
+  animation: edge-glow-scroll 5s linear infinite;
+}
+
+@keyframes edge-glow-scroll {
+  0% { left: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
 }
