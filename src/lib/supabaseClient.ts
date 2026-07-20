@@ -18,14 +18,20 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
 
-export const supabase: SupabaseClient | null = isSupabaseConfigured
-  ? createClient(supabaseUrl!, supabaseAnonKey!, {
+function createSharedSupabaseClient(): SupabaseClient | null {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return null;
+  }
+
+  return createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
         persistSession: true,
         autoRefreshToken: true,
       },
-    })
-  : null;
+    });
+}
+
+export const supabase: SupabaseClient | null = createSharedSupabaseClient();
 
 // Robust local storage fallback key definitions
 const LOCAL_STORAGE_KEY_SYSTEMS = 'cosmobuilder_star_systems';
