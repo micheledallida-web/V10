@@ -10,7 +10,7 @@ export interface PlanetConfig {
   ringsColor?: string;
   rotationSpeed: number;
   moonsCount: number;
-  mass: number;
+  mass: number; // in Earth masses
   atmosphere: string;
 }
 

@@ -7,4 +7,4 @@ export function createSupabaseBrowserClient(): SupabaseClient {
 }
 
 export const createClientBrowser = createSupabaseBrowserClient;
-export { isSupabaseConfigured, requireSupabaseClient, supabase } from './supabaseClient';
+export { isSupabaseConfigured, requireSupabaseClient } from './supabaseClient';

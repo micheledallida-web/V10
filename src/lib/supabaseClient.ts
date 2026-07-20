@@ -31,11 +31,7 @@ function createSharedSupabaseClient(): SupabaseClient | null {
     });
 }
 
-/**
- * Shared browser Supabase client instance.
- * Check `isSupabaseConfigured` or call `requireSupabaseClient()` before using it in code paths that require live credentials.
- */
-export const supabase: SupabaseClient | null = createSharedSupabaseClient();
+const supabase: SupabaseClient | null = createSharedSupabaseClient();
 
 export function requireSupabaseClient(): SupabaseClient {
   if (!supabase) {
