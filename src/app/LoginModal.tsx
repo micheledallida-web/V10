@@ -144,6 +144,13 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onEmailSig
     </h2>
   );
 
+  const centeredLogoAndHeading = (
+    <div className="mb-4 flex flex-col items-center text-center">
+      {spinningQ}
+      {heading}
+    </div>
+  );
+
   const footerLinks = (
     <p className="mt-4 sm:mt-6 text-center text-xs sm:text-sm leading-relaxed text-white/45">
       By continuing, you agree to our
@@ -257,6 +264,7 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onEmailSig
 
             {authStep === "email" && (
               <div>
+                {centeredLogoAndHeading}
                 <form
                   onSubmit={async (e) => {
                     e.preventDefault();
@@ -329,10 +337,7 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onEmailSig
                   </button>
                 </p>
 
-                <div className="mb-4 flex flex-col items-center text-center">
-                  {spinningQ}
-                  {heading}
-                </div>
+                {centeredLogoAndHeading}
 
                 <form
                   onSubmit={async (e) => {
@@ -412,10 +417,7 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onEmailSig
 
             {authStep === "phone" && (
               <div>
-                <div className="mb-4 flex flex-col items-center text-center">
-                  {spinningQ}
-                  {heading}
-                </div>
+                {centeredLogoAndHeading}
 
                 <p className="mb-3 text-center text-sm sm:text-base font-medium text-white/85">
                   Already have an account?{" "}
