@@ -1,6 +1,6 @@
 "use client";
 
-import { Apple, ArrowLeft, ArrowRight, Check, ChevronDown, Eye, EyeOff, Facebook, Github as GitHubIcon, KeyRound, Mail, Search, UserRound } from "lucide-react";
+import { Apple, ArrowLeft, ArrowRight, Check, ChevronDown, Eye, EyeOff, Github as GitHubIcon, KeyRound, Mail, Search, UserRound } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import countries from "world-countries";
 import Q3DCanvas from "./Q3DCanvas";
@@ -158,6 +158,9 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onEmailSig
     </p>
   );
 
+  const iconOnlyProviderButtonClass =
+    "h-10 rounded-full border border-white/15 bg-brandSurfaceAccent flex items-center justify-center hover:border-white/30 transition disabled:opacity-60";
+
   return (
       <div className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-md p-3 sm:p-6 flex items-center justify-center">
         <div className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-[28px] border border-brandBorder bg-brandSurface p-4 sm:p-6 text-white relative">
@@ -198,23 +201,25 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onEmailSig
                     <ProviderButton
                       provider="GitHub"
                       onProviderAuth={onProviderAuth}
-                      className="h-10 rounded-full border border-white/15 bg-brandSurfaceAccent flex items-center justify-center hover:border-white/30 transition disabled:opacity-60"
+                      className={iconOnlyProviderButtonClass}
                     >
-                      <GitHubIcon className="h-5 w-5 shrink-0" />
+                      <GitHubIcon className="h-5 w-5 shrink-0 text-brandGreen" />
                     </ProviderButton>
                     <ProviderButton
                       provider="Apple"
                       onProviderAuth={onProviderAuth}
-                      className="h-10 rounded-full border border-white/15 bg-brandSurfaceAccent flex items-center justify-center hover:border-white/30 transition disabled:opacity-60"
+                      className={iconOnlyProviderButtonClass}
                     >
-                      <Apple className="h-5 w-5" />
+                      <Apple className="h-5 w-5 text-white" />
                     </ProviderButton>
                     <ProviderButton
                       provider="Facebook"
                       onProviderAuth={onProviderAuth}
-                      className="h-10 rounded-full border border-white/15 bg-brandSurfaceAccent flex items-center justify-center hover:border-white/30 transition disabled:opacity-60"
+                      className={iconOnlyProviderButtonClass}
                     >
-                      <Facebook className="h-5 w-5" />
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#1877F2] text-white text-[12px] font-bold leading-none">
+                        f
+                      </span>
                     </ProviderButton>
                   </div>
 
