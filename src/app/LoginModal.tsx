@@ -1,17 +1,18 @@
 "use client";
 
-import { Apple, ArrowLeft, ArrowRight, Check, ChevronDown, Facebook, Github as GitHubIcon, Mail, Search, UserRound } from "lucide-react";
+import { Apple, ArrowLeft, ArrowRight, Check, ChevronDown, Eye, EyeOff, Facebook, Github as GitHubIcon, KeyRound, Mail, Search, UserRound } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import countries from "world-countries";
 import Q3DCanvas from "./Q3DCanvas";
 
-type AuthStep = "options" | "email" | "phone";
+type AuthStep = "options" | "email" | "phone" | "signin";
 
 type LoginModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onProviderAuth: (provider: string) => Promise<void> | void;
-  onProjectDescriptionSubmit: (payload: { name: string; email: string; projectDescription: string }) => Promise<void> | void;
+  onEmailSignUp: (payload: { name: string; email: string; password: string }) => Promise<void> | void;
+  onEmailSignIn: (payload: { email: string; password: string }) => Promise<void> | void;
   onPhoneContinue: (payload: { name: string; dialCode: string; phone: string }) => Promise<void> | void;
   initialStep?: AuthStep;
 };
@@ -82,12 +83,16 @@ const COUNTRY_OPTIONS: CountryOption[] = countries
   .filter((country): country is CountryOption => Boolean(country))
   .sort((a, b) => a.name.localeCompare(b.name));
 
-export default function LoginModal({ isOpen, onClose, onProviderAuth, onProjectDescriptionSubmit, onPhoneContinue, initialStep }: LoginModalProps) {
+export default function LoginModal({ isOpen, onClose, onProviderAuth, onEmailSignUp, onEmailSignIn, onPhoneContinue, initialStep }: LoginModalProps) {
   const [authStep, setAuthStep] = useState<AuthStep>("options");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [signinEmail, setSigninEmail] = useState("");
+  const [signinPassword, setSigninPassword] = useState("");
+  const [showSigninPassword, setShowSigninPassword] = useState(false);
   const [phone, setPhone] = useState("");
-  const [projectDescription, setProjectDescription] = useState("");
   const [countryQuery, setCountryQuery] = useState("");
   const [countryDropdownOpen, setCountryDropdownOpen] = useState(false);
   const [selectedCountryCode, setSelectedCountryCode] = useState("IN");
@@ -116,6 +121,11 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onProjectD
     setCountryQuery("");
     setName("");
     setEmail("");
+    setPassword("");
+    setShowPassword(false);
+    setSigninEmail("");
+    setSigninPassword("");
+    setShowSigninPassword(false);
     onClose();
   }
 
@@ -239,6 +249,17 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onProjectD
 
             {authStep === "email" && (
               <div>
+                <p className="mb-3 text-center text-sm sm:text-base font-medium text-white/85">
+                  Already have an account?{" "}
+                  <button
+                    type="button"
+                    onClick={() => setAuthStep("signin")}
+                    className="underline underline-offset-4 hover:text-brandGreen transition-colors"
+                  >
+                    Sign in
+                  </button>
+                </p>
+
                 <div className="mb-4 flex flex-col items-center text-center">
                   {spinningQ}
                   {heading}
@@ -247,7 +268,7 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onProjectD
                 <form
                   onSubmit={async (e) => {
                     e.preventDefault();
-                    await onProjectDescriptionSubmit({ name, email, projectDescription });
+                    await onEmailSignUp({ name, email, password });
                   }}
                   className="space-y-3"
                 >
@@ -272,13 +293,24 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onProjectD
                     />
                   </div>
 
-                  <textarea
-                    value={projectDescription}
-                    onChange={(e) => setProjectDescription(e.target.value)}
-                    placeholder="Describe your idea, build website and apps in minutes"
-                    rows={4}
-                    className="w-full resize-none rounded-2xl border border-white/15 bg-brandSurfaceAccent px-4 py-3 text-sm sm:text-base text-white placeholder:text-white/40 outline-none focus:border-brandGreen/50"
-                  />
+                  <div className="h-11 rounded-full border border-white/15 bg-brandSurfaceAccent px-4 flex items-center gap-3">
+                    <KeyRound className="h-5 w-5 shrink-0 text-white/45" />
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Enter your password"
+                      className="w-full bg-transparent text-sm sm:text-base placeholder:text-white/40 outline-none"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((v) => !v)}
+                      className="text-white/45 hover:text-white/80 transition-colors shrink-0"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
 
                   <div className="pt-1 flex items-center gap-3">
                     <button
@@ -294,6 +326,100 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onProjectD
                       className="h-11 flex-1 rounded-full bg-white text-[#151515] text-sm sm:text-base font-semibold tracking-tight flex items-center justify-center gap-2"
                     >
                       Get Started <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </div>
+                </form>
+
+                {footerLinks}
+              </div>
+            )}
+
+            {authStep === "signin" && (
+              <div>
+                <p className="mb-3 text-center text-sm sm:text-base font-medium text-white/85">
+                  Don&apos;t have an account?{" "}
+                  <button
+                    type="button"
+                    onClick={() => setAuthStep("email")}
+                    className="underline underline-offset-4 hover:text-brandGreen transition-colors"
+                  >
+                    Sign up
+                  </button>
+                </p>
+
+                <div className="mb-4 flex flex-col items-center text-center">
+                  {spinningQ}
+                  {heading}
+                </div>
+
+                <form
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    await onEmailSignIn({ email: signinEmail, password: signinPassword });
+                  }}
+                  className="space-y-3"
+                >
+                  <div className="h-11 rounded-full border border-white/15 bg-brandSurfaceAccent px-4 flex items-center gap-3">
+                    <Mail className="h-5 w-5 shrink-0 text-white/45" />
+                    <input
+                      type="email"
+                      value={signinEmail}
+                      onChange={(e) => setSigninEmail(e.target.value)}
+                      placeholder="Enter your email"
+                      className="w-full bg-transparent text-sm sm:text-base placeholder:text-white/40 outline-none"
+                    />
+                  </div>
+
+                  <div className="h-11 rounded-full border border-white/15 bg-brandSurfaceAccent px-4 flex items-center gap-3">
+                    <KeyRound className="h-5 w-5 shrink-0 text-white/45" />
+                    <input
+                      type={showSigninPassword ? "text" : "password"}
+                      value={signinPassword}
+                      onChange={(e) => setSigninPassword(e.target.value)}
+                      placeholder="Enter your password"
+                      className="w-full bg-transparent text-sm sm:text-base placeholder:text-white/40 outline-none"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowSigninPassword((v) => !v)}
+                      className="text-white/45 hover:text-white/80 transition-colors shrink-0"
+                      aria-label={showSigninPassword ? "Hide password" : "Show password"}
+                    >
+                      {showSigninPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
+
+                  <div className="text-right">
+                    <a href="#" className="text-xs sm:text-sm text-white/50 hover:text-white/80 underline underline-offset-4 transition-colors">
+                      Forgot Password?
+                    </a>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full h-11 rounded-full bg-white text-[#151515] text-sm sm:text-base font-semibold tracking-tight flex items-center justify-center gap-2"
+                  >
+                    Login <ArrowRight className="h-4 w-4" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setAuthStep("options")}
+                    className="w-full h-11 rounded-full border border-white/15 bg-brandSurfaceAccent text-sm sm:text-base font-semibold flex items-center justify-center hover:border-white/30 transition"
+                  >
+                    <ArrowLeft className="h-4 w-4 mr-2" /> Go Back
+                  </button>
+
+                  <div className="pt-1 flex justify-center">
+                    <button
+                      type="button"
+                      className="flex items-center gap-2 text-xs sm:text-sm text-white/50 hover:text-white/80 transition-colors"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                        <rect width="20" height="16" x="2" y="4" rx="2" />
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                      </svg>
+                      Use SSO login
                     </button>
                   </div>
                 </form>

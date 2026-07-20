@@ -204,9 +204,9 @@ function AuthButton({
 
 export default function LandingPage() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [authModalInitialStep, setAuthModalInitialStep] = useState<"options" | "email" | "phone">("options");
+  const [authModalInitialStep, setAuthModalInitialStep] = useState<"options" | "email" | "phone" | "signin">("options");
 
-  function openAuthModal(step: "options" | "email" | "phone" = "options") {
+  function openAuthModal(step: "options" | "email" | "phone" | "signin" = "options") {
     setAuthModalInitialStep(step);
     setAuthModalOpen(true);
   }
@@ -220,8 +220,14 @@ export default function LandingPage() {
     alert(`Authorization request with ${provider} completed. (placeholder — wire up Supabase OAuth here)`);
   }
 
-  async function handleProjectDescriptionSubmit(payload: { name: string; email: string; projectDescription: string }) {
-    alert(`Project description submitted: ${payload.projectDescription || "(empty)"}`);
+  async function handleEmailSignUp(payload: { name: string; email: string; password: string }) {
+    await new Promise((resolve) => setTimeout(resolve, AUTH_SIMULATION_DELAY_MS));
+    alert(`Sign-up for ${payload.name} (${payload.email}) — placeholder. Wire up Supabase signUp here.`);
+  }
+
+  async function handleEmailSignIn(payload: { email: string; password: string }) {
+    await new Promise((resolve) => setTimeout(resolve, AUTH_SIMULATION_DELAY_MS));
+    alert(`Sign-in for ${payload.email} — placeholder. Wire up Supabase signInWithPassword here.`);
   }
 
   async function handlePhoneContinue(payload: { name: string; dialCode: string; phone: string }) {
@@ -283,7 +289,8 @@ export default function LandingPage() {
         isOpen={authModalOpen}
         onClose={closeAuthModal}
         onProviderAuth={handleProviderAuth}
-        onProjectDescriptionSubmit={handleProjectDescriptionSubmit}
+        onEmailSignUp={handleEmailSignUp}
+        onEmailSignIn={handleEmailSignIn}
         onPhoneContinue={handlePhoneContinue}
         initialStep={authModalInitialStep}
       />
