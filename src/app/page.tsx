@@ -173,7 +173,7 @@ const FEATURES = [
   { icon: Cpu, title: "AI Agents & Workflows", desc: "Embed complex autonomous systems into your software application. Orchestrate background processors, webhooks, Vector memory searches, and Stripe-enabled actions.", tag: "Autonomous workflows" },
 ];
 
-const TECH_TAGS = ["React", "Next.js", "Flutter", "React Native", "Supabase", "Firebase", "Stripe", "PostgreSQL", "Vector Databases", "File Storage", "Cloud Functions", "GitHub Integration", "One Click Deploy"];
+const TECH_TAGS = ["React", "Next.js", "Flutter", "Stripe", "PostgreSQL", "Vector Databases", "GitHub Integration", "One Click Deploy"];
 const PRICING_TIERS = [
   {
     name: "Free",
