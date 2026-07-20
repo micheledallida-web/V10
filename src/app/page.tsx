@@ -231,6 +231,7 @@ export default function LandingPage() {
   }
 
   async function handlePhoneContinue(payload: { name: string; dialCode: string; phone: string }) {
+    await new Promise((resolve) => setTimeout(resolve, AUTH_SIMULATION_DELAY_MS));
     alert(`Get code for ${payload.name || "user"} (${payload.dialCode || ""} ${payload.phone || "no phone"})`);
   }
 

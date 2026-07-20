@@ -102,8 +102,7 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onEmailSig
     setAuthStep(initialStep ?? "options");
     setCountryDropdownOpen(false);
     setCountryQuery("");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen]);
+  }, [isOpen, initialStep]);
 
   const filteredCountries = useMemo(() => {
     const query = countryQuery.trim().toLowerCase();
@@ -437,9 +436,13 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onEmailSig
 
                 <p className="mb-3 text-center text-sm sm:text-base font-medium text-white/85">
                   Already have an account?{" "}
-                  <a href="#" className="underline underline-offset-4">
+                  <button
+                    type="button"
+                    onClick={() => setAuthStep("signin")}
+                    className="underline underline-offset-4 hover:text-brandGreen transition-colors"
+                  >
                     Sign in
-                  </a>
+                  </button>
                 </p>
 
                 <form
