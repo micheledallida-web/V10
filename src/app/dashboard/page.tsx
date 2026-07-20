@@ -11,6 +11,8 @@ type ProjectSummary = {
 
 async function getProjects(): Promise<ProjectSummary[]> {
   const supabase = await createSupabaseServerClient();
+  if (!supabase) return [];
+
   const { data, error } = await supabase
     .from('projects')
     .select('id, name, updated_at, status')
@@ -23,7 +25,7 @@ async function getProjects(): Promise<ProjectSummary[]> {
   return data.map((row) => ({
     id: String(row.id),
     name: String(row.name),
-    updatedAt: new Date(row.updated_at as string).toLocaleDateString('en-US', {
+    updatedAt: new Date(row.updated_at as string).toLocaleDateString(undefined, {
       month: 'short',
       day: 'numeric',
       year: 'numeric',

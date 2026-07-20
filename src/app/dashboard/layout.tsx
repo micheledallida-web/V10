@@ -5,6 +5,13 @@ import { createSupabaseServerClient } from '@/lib/supabase-server';
 
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
   const supabase = await createSupabaseServerClient();
+
+  // Redirect to landing page if Supabase is not configured or the visitor
+  // is not authenticated.
+  if (!supabase) {
+    redirect('/');
+  }
+
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

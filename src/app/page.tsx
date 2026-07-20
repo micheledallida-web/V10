@@ -295,12 +295,18 @@ export default function LandingPage() {
     setAuthModalOpen(false);
   }
 
-  async function handleProviderAuth(provider: string) {
+  /** Returns a configured Supabase client, or null with an alert if env vars are missing. */
+  function getSupabaseOrWarn() {
     if (!isSupabaseConfigured) {
       alert("Supabase is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your environment.");
-      return;
+      return null;
     }
-    const supabase = createSupabaseBrowserClient();
+    return createSupabaseBrowserClient();
+  }
+
+  async function handleProviderAuth(provider: string) {
+    const supabase = getSupabaseOrWarn();
+    if (!supabase) return;
     await supabase.auth.signInWithOAuth({
       provider: provider.toLowerCase() as Provider,
       options: { redirectTo: `${window.location.origin}/dashboard` },
@@ -308,11 +314,8 @@ export default function LandingPage() {
   }
 
   async function handleEmailSignUp(payload: { name: string; email: string; password: string }) {
-    if (!isSupabaseConfigured) {
-      alert("Supabase is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your environment.");
-      return;
-    }
-    const supabase = createSupabaseBrowserClient();
+    const supabase = getSupabaseOrWarn();
+    if (!supabase) return;
     const { error } = await supabase.auth.signUp({
       email: payload.email,
       password: payload.password,
@@ -326,11 +329,8 @@ export default function LandingPage() {
   }
 
   async function handleEmailSignIn(payload: { email: string; password: string }) {
-    if (!isSupabaseConfigured) {
-      alert("Supabase is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your environment.");
-      return;
-    }
-    const supabase = createSupabaseBrowserClient();
+    const supabase = getSupabaseOrWarn();
+    if (!supabase) return;
     const { error } = await supabase.auth.signInWithPassword({
       email: payload.email,
       password: payload.password,
@@ -343,12 +343,15 @@ export default function LandingPage() {
   }
 
   async function handlePhoneContinue(payload: { name: string; dialCode: string; phone: string }) {
-    if (!isSupabaseConfigured) {
-      alert("Supabase is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your environment.");
+    const supabase = getSupabaseOrWarn();
+    if (!supabase) return;
+    const dialCode = payload.dialCode.trim();
+    const localNumber = payload.phone.replace(/\D/g, "");
+    if (!dialCode || !localNumber) {
+      alert("Please enter a valid dial code and phone number.");
       return;
     }
-    const supabase = createSupabaseBrowserClient();
-    const phone = `${payload.dialCode}${payload.phone}`.replace(/\s+/g, "");
+    const phone = `${dialCode}${localNumber}`;
     const { error } = await supabase.auth.signInWithOtp({ phone });
     if (error) {
       alert(error.message);
