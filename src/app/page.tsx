@@ -342,6 +342,11 @@ export default function LandingPage() {
               <ProviderButton loadingLabel="Authorization Pending..." onProviderAuth={handleProviderAuth} provider="Apple" className="inline-flex items-center justify-center gap-2 py-3.5 px-3 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-medium transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-1 focus:ring-white/20"><Apple className={`${PROVIDER_ICON_CLASS} text-white`} /><span>Apple</span></ProviderButton>
               <ProviderButton loadingLabel="Authorization Pending..." onProviderAuth={handleProviderAuth} provider="Facebook" className="inline-flex items-center justify-center gap-2 py-3.5 px-3 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-medium transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-1 focus:ring-white/20"><FacebookIcon className={PROVIDER_ICON_CLASS} /><span>Facebook</span></ProviderButton>
             </div>
+            <div className="flex items-center gap-3 py-1">
+              <div className="flex-1 h-px bg-white/15" />
+              <span className="text-white/45 text-xs sm:text-sm font-medium tracking-widest">OR</span>
+              <div className="flex-1 h-px bg-white/15" />
+            </div>
             <div ref={heroAuthButtonsRowRef} className="grid grid-cols-2 gap-4">
               <button onClick={() => openAuthModal("email")} className="inline-flex items-center justify-center gap-2 py-4 px-5 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-semibold transition-all duration-300 hover:scale-[1.01] hover:border-brandGreen/40 focus:outline-none focus:ring-1 focus:ring-brandGreen/40"><Mail className={`${PROVIDER_ICON_CLASS} text-white/80`} />Continue with Email</button>
               <button onClick={() => openAuthModal("phone")} className="inline-flex items-center justify-center gap-2 py-4 px-5 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-semibold transition-all duration-300 hover:scale-[1.01] hover:border-brandGreen/40 focus:outline-none focus:ring-1 focus:ring-brandGreen/40"><Phone className={`${PROVIDER_ICON_CLASS} text-white/80`} />Continue with Phone</button>
