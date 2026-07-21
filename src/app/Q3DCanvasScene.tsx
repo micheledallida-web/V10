@@ -9,7 +9,7 @@ import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js
 const ROTATION_PERIOD_SECONDS = 16; // one full revolution every 16s, constant/linear
 
 // Obsidian black — deep, near-mirror body color shared by the ring and the tail.
-const OBSIDIAN_BLACK = "#030303";
+const OBSIDIAN_BLACK = "#08080A";
 
 // Ring proportions, shared by the ring shape and the tail's penetration math below.
 const RING_OUTER_RADIUS = 2.0;
@@ -91,8 +91,8 @@ function QLogo({ scale = 1 }: { scale?: number }) {
     () =>
       new THREE.MeshPhysicalMaterial({
         color: OBSIDIAN_BLACK,
-        metalness: 0.95,
-        roughness: 0.05,
+        metalness: 0.9,
+        roughness: 0.1,
         clearcoat: 1.0,
         clearcoatRoughness: 0.03,
         reflectivity: 1.0,
@@ -228,8 +228,7 @@ export default function Q3DCanvasScene({
     >
       {withBackdrop && (
         <>
-          <color attach="background" args={["#000000"]} />
-          {/* Faint ambient particles drifting in the dark background. */}
+          {/* Faint ambient particles drifting in the background. */}
           <Sparkles count={80} scale={9} size={1.4} speed={0.25} opacity={0.35} color="#ffffff" />
         </>
       )}
