@@ -520,8 +520,8 @@ export default function LandingPage() {
                 <div className="flex-1 h-px bg-white/15" />
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <button type="button" onClick={() => openAuthModal("email")} className={heroSecondaryActionButtonClass}><Mail className={`${PROVIDER_ICON_CLASS} text-white/80`} /><span>Continue with Email</span></button>
-                <button type="button" onClick={() => openAuthModal("phone")} className={heroSecondaryActionButtonClass}><Phone className={`${PROVIDER_ICON_CLASS} text-white/80`} /><span>Continue with Phone</span></button>
+                <button type="button" aria-label="Continue with Email" onClick={() => openAuthModal("email")} className={heroSecondaryActionButtonClass}><Mail className={`${PROVIDER_ICON_CLASS} text-white/80`} /><span>Continue with Email</span></button>
+                <button type="button" aria-label="Continue with Phone" onClick={() => openAuthModal("phone")} className={heroSecondaryActionButtonClass}><Phone className={`${PROVIDER_ICON_CLASS} text-white/80`} /><span>Continue with Phone</span></button>
               </div>
             </div>
           </div>
