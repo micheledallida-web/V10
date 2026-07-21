@@ -53,3 +53,9 @@ For the Vercel project:
 3. Redeploy after saving variables (required for the deployment to pick them up)
 
 Without these variables, sign-up/sign-in/OAuth/OTP flows will be unavailable.
+
+### Deployment health check
+
+The app exposes `GET /api/health` with `supabaseConfigured` status.
+- In non-production, it also returns `missingSupabaseEnvVars`.
+- In production, detailed missing-var names are hidden by default; set `SUPABASE_HEALTH_INCLUDE_DETAILS=true` only when you explicitly need detailed diagnostics.

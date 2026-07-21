@@ -1,10 +1,10 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
-import { describeMissingSupabaseEnvVars, isSupabaseConfigured } from './supabaseClient';
+import { describeMissingSupabaseEnvVars } from './supabaseClient';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 let hasLoggedMissingSupabaseConfig = false;
 
 /**
@@ -21,7 +21,7 @@ let hasLoggedMissingSupabaseConfig = false;
  *   const { data: { user } } = await supabase.auth.getUser();
  */
 export async function createSupabaseServerClient() {
-  if (!isSupabaseConfigured) {
+  if (!supabaseUrl || !supabaseAnonKey) {
     if (!hasLoggedMissingSupabaseConfig) {
       // eslint-disable-next-line no-console
       console.error(describeMissingSupabaseEnvVars());

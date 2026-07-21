@@ -182,16 +182,30 @@ const FEATURES = [
 ];
 
 const TECH_TAGS = ["React", "Next.js", "Flutter", "Stripe", "PostgreSQL", "Vector Databases", "GitHub Integration", "One Click Deploy"];
-const SHOULD_SHOW_SUPABASE_CONFIG_BANNER =
+const SHOW_SUPABASE_CONFIG_WARNING =
   !isSupabaseConfigured &&
   (process.env.NODE_ENV !== "production" ||
     process.env.NEXT_PUBLIC_SHOW_SUPABASE_CONFIG_WARNING === "true");
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
-function getSupabaseUnavailableAlertMessage() {
-  const missingVars = getMissingSupabaseEnvVars();
-  const missingVarsSegment = missingVars.length ? ` Missing: ${missingVars.join(", ")}.` : "";
+function getSupabaseUnavailableMessage(missingVars: string[]) {
+  if (!IS_PRODUCTION) {
+    const missingVarsSegment = missingVars.length ? ` Missing: ${missingVars.join(", ")}.` : "";
+    return `Authentication is currently unavailable because Supabase environment configuration is incomplete.${missingVarsSegment} Update .env.local (or deployment env vars) and restart/redeploy.`;
+  }
 
-  return `Authentication is currently unavailable because deployment environment configuration is incomplete.${missingVarsSegment} Please ask support to verify Supabase environment variables and redeploy.`;
+  return "Authentication is currently unavailable because deployment environment configuration is incomplete. Please ask support to verify Supabase environment variables and redeploy.";
+}
+
+function getSupabaseClientCreationFailureMessage(error: unknown) {
+  const message =
+    "Authentication is currently unavailable. Please verify Supabase environment configuration and try again later or contact support.";
+
+  if (IS_PRODUCTION || !(error instanceof Error) || !error.message) {
+    return message;
+  }
+
+  return `${message} Technical details: ${error.message}`;
 }
 
 const PRICING_TIERS = [
@@ -315,9 +329,10 @@ export default function LandingPage() {
   /** Returns a configured Supabase client, or null with an alert if env vars are missing. */
   function getSupabaseOrWarn() {
     if (!isSupabaseConfigured) {
+      const missingVars = getMissingSupabaseEnvVars();
       // eslint-disable-next-line no-console
       console.error(describeMissingSupabaseEnvVars());
-      alert(getSupabaseUnavailableAlertMessage());
+      alert(getSupabaseUnavailableMessage(missingVars));
       return null;
     }
     try {
@@ -325,9 +340,7 @@ export default function LandingPage() {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error("Failed to create Supabase browser client:", error);
-      alert(
-        "Authentication is currently unavailable. Please verify Supabase environment configuration and try again later or contact support.",
-      );
+      alert(getSupabaseClientCreationFailureMessage(error));
       return null;
     }
   }
@@ -457,7 +470,7 @@ export default function LandingPage() {
       </header>
 
       <main className="relative z-10 pt-20">
-        {SHOULD_SHOW_SUPABASE_CONFIG_BANNER && (
+        {SHOW_SUPABASE_CONFIG_WARNING && (
           <section className="mx-auto mt-6 max-w-5xl px-6">
             <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
               Authentication is disabled because Supabase environment variables are not configured for this deployment.

@@ -15,13 +15,16 @@ let _browserClient: SupabaseClient | null = null;
  * Throws if the required environment variables are not set.
  */
 export function createSupabaseBrowserClient(): SupabaseClient {
-  if (!isSupabaseConfigured) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error(describeMissingSupabaseEnvVars());
   }
   if (!_browserClient) {
     _browserClient = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      supabaseUrl,
+      supabaseAnonKey,
     ) as SupabaseClient;
   }
   return _browserClient;
