@@ -27,8 +27,6 @@ import {
   Phone,
   Twitter,
   Slack,
-  Eye,
-  EyeOff,
 } from "lucide-react";
 
 function useReveal() {
@@ -285,14 +283,6 @@ export default function LandingPage() {
   const [showGetStartedButton, setShowGetStartedButton] = useState(false);
   const heroAuthButtonsRowRef = useRef<HTMLDivElement | null>(null);
 
-  // Hero inline form state
-  const [heroStep, setHeroStep] = useState<"signup" | "options">("signup");
-  const [heroName, setHeroName] = useState("");
-  const [heroEmail, setHeroEmail] = useState("");
-  const [heroPassword, setHeroPassword] = useState("");
-  const [showHeroPassword, setShowHeroPassword] = useState(false);
-  const [heroLoading, setHeroLoading] = useState(false);
-
   // Redirect already-authenticated users straight to the dashboard.
   useEffect(() => {
     if (!isSupabaseConfigured) return;
@@ -452,13 +442,6 @@ export default function LandingPage() {
     }
   }
 
-  async function handleHeroSignUp(e: React.FormEvent) {
-    e.preventDefault();
-    setHeroLoading(true);
-    await handleEmailSignUp({ name: heroName, email: heroEmail, password: heroPassword });
-    setHeroLoading(false);
-  }
-
   return (
     <div className="bg-brandBg text-white antialiased font-sans overflow-x-hidden selection:bg-brandGreen selection:text-black min-h-screen relative">
       <CustomCursor />
@@ -505,7 +488,7 @@ export default function LandingPage() {
           </div>
 
           {/* Headline */}
-          <div className="max-w-4xl text-center mx-auto mb-8 z-20 reveal-element active">
+          <div className="max-w-4xl text-center mx-auto mb-4 z-20 reveal-element active">
             <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tighter leading-[1.05] text-white">
               <span className="metal-shimmer">Build Full-Stack</span>
               <br />
@@ -513,94 +496,50 @@ export default function LandingPage() {
             </h1>
           </div>
 
-          {/* Auth area — ref on this div so sticky header CTA appears once the form scrolls out of view */}
+          {/* Toggle link below headline */}
+          <p className="text-center text-sm text-white/50 mb-8 z-20 reveal-element active">
+            Don&apos;t have an account?{" "}
+            <button
+              type="button"
+              onClick={() => openAuthModal("email")}
+              className="underline underline-offset-4 transition-opacity hover:opacity-80"
+              style={{ color: "#70F39B" }}
+            >
+              Sign up
+            </button>
+            {" · "}
+            <button
+              type="button"
+              onClick={() => openAuthModal("signin")}
+              className="underline underline-offset-4 transition-opacity hover:opacity-80"
+              style={{ color: "#70F39B" }}
+            >
+              Sign in
+            </button>
+          </p>
+
+          {/* Auth area — ref on this div so sticky header CTA appears once it scrolls out of view */}
           <div id="signup" ref={heroAuthButtonsRowRef} className="w-full max-w-md mx-auto z-20 reveal-element active">
-            {heroStep === "signup" ? (
-              <form onSubmit={handleHeroSignUp} className="space-y-4">
-                <input
-                  value={heroName}
-                  onChange={(e) => setHeroName(e.target.value)}
-                  placeholder="Name"
-                  required
-                  /* ios-input-fix: prevents iOS Safari auto-zoom on input focus */
-                  className="w-full rounded-full bg-white/10 border border-white/20 text-white placeholder-white/40 px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#70F39B]/40 transition-colors ios-input-fix"
-                />
-                <input
-                  value={heroEmail}
-                  onChange={(e) => setHeroEmail(e.target.value)}
-                  type="email"
-                  placeholder="Email"
-                  required
-                  className="w-full rounded-full bg-white/10 border border-white/20 text-white placeholder-white/40 px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#70F39B]/40 transition-colors ios-input-fix"
-                />
-                <div className="relative">
-                  <input
-                    value={heroPassword}
-                    onChange={(e) => setHeroPassword(e.target.value)}
-                    type={showHeroPassword ? "text" : "password"}
-                    placeholder="Password"
-                    required
-                    className="w-full rounded-full bg-white/10 border border-white/20 text-white placeholder-white/40 px-5 py-3.5 pr-14 focus:outline-none focus:ring-2 focus:ring-[#70F39B]/40 transition-colors ios-input-fix"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowHeroPassword(!showHeroPassword)}
-                    className="absolute right-5 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors"
-                    aria-label={showHeroPassword ? "Hide password" : "Show password"}
-                  >
-                    {showHeroPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                </div>
-                <button
-                  type="submit"
-                  disabled={heroLoading}
-                  /* #70F39B is a slightly lighter mint green than brandGreen per design spec */
-                  className="w-full bg-white text-black py-3.5 px-6 rounded-full font-semibold text-base hover:bg-[#70F39B] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#70F39B]/40 disabled:opacity-60"
-                >
-                  {heroLoading ? "Signing up…" : "Get Started →"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setHeroStep("options")}
-                  className="w-full py-3 text-white/50 hover:text-white text-sm transition-colors"
-                >
-                  ← Go Back
-                </button>
-                <p className="text-center text-sm text-white/50 pt-1">
-                  Already have an account?{" "}
-                  <button
-                    type="button"
-                    onClick={() => openAuthModal("signin")}
-                    /* #70F39B mint green per design spec — matches line 2 headline color */
-                    className="underline transition-colors hover:opacity-80"
-                    style={{ color: "#70F39B" }}
-                  >
-                    Sign in
-                  </button>
-                </p>
-              </form>
-            ) : (
-              <div className="space-y-6">
-                <ProviderButton loadingLabel="Authorization Pending..." onProviderAuth={handleProviderAuth} provider="Google" className="w-full inline-flex items-center justify-center gap-2 bg-white text-black py-4 px-6 rounded-pill text-base font-semibold transition-all duration-300 hover:bg-brandGreen hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-brandGreen/40 shadow-lg group">
-                  <GoogleIcon className={PROVIDER_ICON_CLASS} />
-                  <span>Continue with Google</span>
-                </ProviderButton>
-                <div className="grid grid-cols-3 gap-3">
-                  <ProviderButton loadingLabel="Authorization Pending..." onProviderAuth={handleProviderAuth} provider="GitHub" className="inline-flex items-center justify-center gap-2 py-3.5 px-3 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-medium transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-1 focus:ring-white/20"><GitHubIcon className={`${PROVIDER_ICON_CLASS} text-brandGreen`} /><span>GitHub</span></ProviderButton>
-                  <ProviderButton loadingLabel="Authorization Pending..." onProviderAuth={handleProviderAuth} provider="Apple" className="inline-flex items-center justify-center gap-2 py-3.5 px-3 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-medium transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-1 focus:ring-white/20"><Apple className={`${PROVIDER_ICON_CLASS} text-white`} /><span>Apple</span></ProviderButton>
-                  <ProviderButton loadingLabel="Authorization Pending..." onProviderAuth={handleProviderAuth} provider="Facebook" className="inline-flex items-center justify-center gap-2 py-3.5 px-3 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-medium transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-1 focus:ring-white/20"><FacebookIcon className={PROVIDER_ICON_CLASS} /><span>Facebook</span></ProviderButton>
-                </div>
-                <div className="flex items-center gap-3 py-1">
-                  <div className="flex-1 h-px bg-white/15" />
-                  <span className="text-white/45 text-xs sm:text-sm font-medium tracking-widest">OR</span>
-                  <div className="flex-1 h-px bg-white/15" />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <button onClick={() => setHeroStep("signup")} className="inline-flex items-center justify-center gap-2 py-4 px-5 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-semibold transition-all duration-300 hover:scale-[1.01] hover:border-brandGreen/40 focus:outline-none focus:ring-1 focus:ring-brandGreen/40"><Mail className={`${PROVIDER_ICON_CLASS} text-white/80`} />Continue with Email</button>
-                  <button onClick={() => openAuthModal("phone")} className="inline-flex items-center justify-center gap-2 py-4 px-5 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-semibold transition-all duration-300 hover:scale-[1.01] hover:border-brandGreen/40 focus:outline-none focus:ring-1 focus:ring-brandGreen/40"><Phone className={`${PROVIDER_ICON_CLASS} text-white/80`} />Continue with Phone</button>
-                </div>
+            <div className="space-y-6">
+              <ProviderButton loadingLabel="Authorization Pending..." onProviderAuth={handleProviderAuth} provider="Google" className="w-full inline-flex items-center justify-center gap-2 bg-white text-black py-4 px-6 rounded-pill text-base font-semibold transition-all duration-300 hover:bg-brandGreen hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-brandGreen/40 shadow-lg group">
+                <GoogleIcon className={PROVIDER_ICON_CLASS} />
+                <span>Continue with Google</span>
+              </ProviderButton>
+              <div className="grid grid-cols-3 gap-3">
+                <ProviderButton loadingLabel="Authorization Pending..." onProviderAuth={handleProviderAuth} provider="GitHub" className="inline-flex items-center justify-center gap-2 py-3.5 px-3 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-medium transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-1 focus:ring-white/20"><GitHubIcon className={`${PROVIDER_ICON_CLASS} text-brandGreen`} /><span>GitHub</span></ProviderButton>
+                <ProviderButton loadingLabel="Authorization Pending..." onProviderAuth={handleProviderAuth} provider="Apple" className="inline-flex items-center justify-center gap-2 py-3.5 px-3 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-medium transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-1 focus:ring-white/20"><Apple className={`${PROVIDER_ICON_CLASS} text-white`} /><span>Apple</span></ProviderButton>
+                <ProviderButton loadingLabel="Authorization Pending..." onProviderAuth={handleProviderAuth} provider="Facebook" className="inline-flex items-center justify-center gap-2 py-3.5 px-3 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-medium transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-1 focus:ring-white/20"><FacebookIcon className={PROVIDER_ICON_CLASS} /><span>Facebook</span></ProviderButton>
               </div>
-            )}
+              <div className="flex items-center gap-3 py-1">
+                <div className="flex-1 h-px bg-white/15" />
+                <span className="text-white/45 text-xs sm:text-sm font-medium tracking-widest">OR</span>
+                <div className="flex-1 h-px bg-white/15" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <button onClick={() => openAuthModal("email")} className="inline-flex items-center justify-center gap-2 py-4 px-5 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-semibold transition-all duration-300 hover:scale-[1.01] hover:border-brandGreen/40 focus:outline-none focus:ring-1 focus:ring-brandGreen/40"><Mail className={`${PROVIDER_ICON_CLASS} text-white/80`} />Continue with Email</button>
+                <button onClick={() => openAuthModal("phone")} className="inline-flex items-center justify-center gap-2 py-4 px-5 bg-brandSurface hover:bg-brandSurfaceAccent border border-brandBorder rounded-pill text-sm font-semibold transition-all duration-300 hover:scale-[1.01] hover:border-brandGreen/40 focus:outline-none focus:ring-1 focus:ring-brandGreen/40"><Phone className={`${PROVIDER_ICON_CLASS} text-white/80`} />Continue with Phone</button>
+              </div>
+            </div>
           </div>
         </section>
 
