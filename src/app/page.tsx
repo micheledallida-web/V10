@@ -484,7 +484,7 @@ export default function LandingPage() {
         <section className="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden pb-16">
           {/* 3D logo with oval spotlight backdrop */}
           <div
-            className="relative mt-4 mb-6 flex items-center justify-center overflow-visible"
+            className="relative mt-4 mb-20 flex items-center justify-center overflow-visible"
             style={{ width: 144, height: 144 }}
           >
             <div
