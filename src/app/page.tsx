@@ -5,7 +5,12 @@ import { useRouter } from "next/navigation";
 import type { Provider } from "@supabase/supabase-js";
 import LoginModal, { FacebookIcon, GoogleIcon, PROVIDER_ICON_CLASS, ProviderButton } from "./LoginModal";
 import Q3DCanvas from "./Q3DCanvas";
-import { createSupabaseBrowserClient, describeMissingSupabaseEnvVars, isSupabaseConfigured } from "@/lib/supabase";
+import {
+  createSupabaseBrowserClient,
+  describeMissingSupabaseEnvVars,
+  getMissingSupabaseEnvVars,
+  isSupabaseConfigured,
+} from "@/lib/supabase";
 import {
   Zap,
   Layout,
@@ -177,6 +182,18 @@ const FEATURES = [
 ];
 
 const TECH_TAGS = ["React", "Next.js", "Flutter", "Stripe", "PostgreSQL", "Vector Databases", "GitHub Integration", "One Click Deploy"];
+const SHOULD_SHOW_SUPABASE_CONFIG_BANNER =
+  !isSupabaseConfigured &&
+  (process.env.NODE_ENV !== "production" ||
+    process.env.NEXT_PUBLIC_SHOW_SUPABASE_CONFIG_WARNING === "true");
+
+function getSupabaseUnavailableAlertMessage() {
+  const missingVars = getMissingSupabaseEnvVars();
+  const missingVarsSegment = missingVars.length ? ` Missing: ${missingVars.join(", ")}.` : "";
+
+  return `Authentication is currently unavailable because deployment environment configuration is incomplete.${missingVarsSegment} Please ask support to verify Supabase environment variables and redeploy.`;
+}
+
 const PRICING_TIERS = [
   {
     name: "Free",
@@ -300,7 +317,7 @@ export default function LandingPage() {
     if (!isSupabaseConfigured) {
       // eslint-disable-next-line no-console
       console.error(describeMissingSupabaseEnvVars());
-      alert("Authentication is currently unavailable. Please try again later or contact support.");
+      alert(getSupabaseUnavailableAlertMessage());
       return null;
     }
     try {
@@ -308,7 +325,9 @@ export default function LandingPage() {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error("Failed to create Supabase browser client:", error);
-      alert("Authentication is currently unavailable. Please try again later or contact support.");
+      alert(
+        "Authentication is currently unavailable. Please verify Supabase environment configuration and try again later or contact support.",
+      );
       return null;
     }
   }
@@ -329,7 +348,9 @@ export default function LandingPage() {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error("Unexpected error during OAuth sign-in:", error);
-      alert("Authentication is currently unavailable. Please try again later or contact support.");
+      alert(
+        "Authentication is currently unavailable. Please verify Supabase environment configuration and try again later or contact support.",
+      );
     }
   }
 
@@ -352,7 +373,9 @@ export default function LandingPage() {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error("Unexpected error during sign-up:", error);
-      alert("Authentication is currently unavailable. Please try again later or contact support.");
+      alert(
+        "Authentication is currently unavailable. Please verify Supabase environment configuration and try again later or contact support.",
+      );
     }
   }
 
@@ -374,7 +397,9 @@ export default function LandingPage() {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error("Unexpected error during sign-in:", error);
-      alert("Authentication is currently unavailable. Please try again later or contact support.");
+      alert(
+        "Authentication is currently unavailable. Please verify Supabase environment configuration and try again later or contact support.",
+      );
     }
   }
 
@@ -398,7 +423,9 @@ export default function LandingPage() {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error("Unexpected error during phone sign-in:", error);
-      alert("Authentication is currently unavailable. Please try again later or contact support.");
+      alert(
+        "Authentication is currently unavailable. Please verify Supabase environment configuration and try again later or contact support.",
+      );
     }
   }
 
@@ -430,6 +457,14 @@ export default function LandingPage() {
       </header>
 
       <main className="relative z-10 pt-20">
+        {SHOULD_SHOW_SUPABASE_CONFIG_BANNER && (
+          <section className="mx-auto mt-6 max-w-5xl px-6">
+            <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
+              Authentication is disabled because Supabase environment variables are not configured for this deployment.
+              Check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY, then redeploy.
+            </div>
+          </section>
+        )}
         <section className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden py-20">
           <div className="w-full max-w-[340px] h-[340px] md:max-w-[420px] md:h-[420px] flex items-center justify-center relative reveal-element active z-10">
             <Q3DCanvas scale={1.05} className="w-full h-full cursor-grab active:cursor-grabbing" />

@@ -1,8 +1,11 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+import { describeMissingSupabaseEnvVars, isSupabaseConfigured } from './supabaseClient';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+let hasLoggedMissingSupabaseConfig = false;
 
 /**
  * Creates a Supabase client for use in Server Components, Route Handlers, and
@@ -18,7 +21,12 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
  *   const { data: { user } } = await supabase.auth.getUser();
  */
 export async function createSupabaseServerClient() {
-  if (!supabaseUrl || !supabaseAnonKey) {
+  if (!isSupabaseConfigured) {
+    if (!hasLoggedMissingSupabaseConfig) {
+      // eslint-disable-next-line no-console
+      console.error(describeMissingSupabaseEnvVars());
+      hasLoggedMissingSupabaseConfig = true;
+    }
     return null;
   }
 
