@@ -169,7 +169,7 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onEmailSig
 
   const logoEmblem = (
     <div className="flex justify-center">
-      <div className="q-logo-backdrop h-36 w-36">
+      <div className="q-logo-backdrop h-28 w-28 sm:h-36 sm:w-36">
         <Q3DCanvas className="h-full w-full" scale={0.82} />
       </div>
     </div>
