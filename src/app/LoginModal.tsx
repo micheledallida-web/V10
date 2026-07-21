@@ -123,7 +123,7 @@ const COUNTRY_OPTIONS: CountryOption[] = countries
   .sort((a, b) => a.name.localeCompare(b.name));
 
 export default function LoginModal({ isOpen, onClose, onProviderAuth, onEmailSignUp, onEmailSignIn, onPhoneContinue, initialStep }: LoginModalProps) {
-  const [authStep, setAuthStep] = useState<AuthStep>("options");
+  const [authStep, setAuthStep] = useState<AuthStep>("email");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -138,7 +138,7 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onEmailSig
 
   useEffect(() => {
     if (!isOpen) return;
-    setAuthStep(initialStep ?? "options");
+    setAuthStep(initialStep ?? "email");
     setCountryDropdownOpen(false);
     setCountryQuery("");
   }, [isOpen, initialStep]);
@@ -154,7 +154,7 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onEmailSig
   if (!isOpen) return null;
 
   function handleClose() {
-    setAuthStep("options");
+    setAuthStep("email");
     setCountryDropdownOpen(false);
     setCountryQuery("");
     setName("");
@@ -169,20 +169,25 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onEmailSig
 
   const logoEmblem = (
     <div className="flex justify-center">
-      <div className="q-logo-backdrop h-[4.5rem] w-[4.5rem] sm:h-[5.25rem] sm:w-[5.25rem]">
+      <div className="q-logo-backdrop h-36 w-36">
         <Q3DCanvas className="h-full w-full" scale={0.82} />
       </div>
     </div>
   );
 
   const heading = (
-    <h2 className="max-w-[19rem] text-center text-[clamp(1.2rem,5vw,2.4rem)] font-bold leading-[1.15] tracking-tight sm:max-w-[21rem]">
-      Build Full-Stack
-      <br />
-      <span className="bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500 bg-clip-text text-transparent">
-        Web &amp; Mobile Apps in Minutes
-      </span>
-    </h2>
+    <div className="flex flex-col items-center gap-1">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em]">
+        <span className="wordmark-quickstart">QuickStart</span><span className="wordmark-ai">.Ai</span>
+      </p>
+      <h2 className="max-w-[19rem] text-center text-[clamp(1.2rem,5vw,2.4rem)] font-bold leading-[1.15] tracking-tight sm:max-w-[21rem]">
+        <span className="metal-shimmer">Build Full-Stack</span>
+        <br />
+        <span className="bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500 bg-clip-text text-transparent">
+          Web &amp; Mobile Apps in Minutes
+        </span>
+      </h2>
+    </div>
   );
 
   const signInSubtext = (
@@ -235,7 +240,7 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onEmailSig
     "flex h-11 w-full items-center justify-center gap-2 rounded-2xl border border-white/10 bg-neutral-900/60 px-4 text-sm font-semibold transition hover:border-emerald-500/30 sm:h-12 sm:text-base";
   const inputWrapperClass =
     "flex h-12 items-center gap-3 rounded-2xl border border-white/10 bg-neutral-900/60 px-4 transition focus-within:ring-2 focus-within:ring-emerald-500/20";
-  const inputFieldClass = "w-full bg-transparent text-sm sm:text-base placeholder:text-white/40 outline-none";
+  const inputFieldClass = "w-full bg-transparent text-base placeholder:text-white/40 outline-none";
   const primaryActionButtonClass =
     "flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-white text-sm sm:text-base font-semibold text-black tracking-tight transition hover:bg-emerald-50 disabled:opacity-60";
   const goBackButtonClass =
@@ -527,7 +532,7 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onEmailSig
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="Enter mobile number"
-                        className="min-w-0 flex-1 bg-transparent text-sm sm:text-base placeholder:text-white/40 outline-none"
+                        className="min-w-0 flex-1 bg-transparent text-base placeholder:text-white/40 outline-none"
                       />
                     </div>
 
@@ -539,7 +544,7 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onEmailSig
                             value={countryQuery}
                             onChange={(e) => setCountryQuery(e.target.value)}
                             placeholder="Search your country"
-                            className="w-full bg-transparent text-sm placeholder:text-white/40 outline-none"
+                            className="w-full bg-transparent text-base placeholder:text-white/40 outline-none"
                           />
                         </div>
 
