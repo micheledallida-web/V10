@@ -27,10 +27,15 @@ import * as THREE from "three";
 
 // Single source of truth for the logo's look. Change values here ONLY —
 // nothing else in this file should set color/metalness/roughness again.
+// Base color is lifted slightly off absolute black (#0a0a0c -> #1a1a1a) and
+// combined with a stronger ambient + rim lighting rig below so the mesh
+// always keeps a visible dark-grey silhouette against the pitch-black page
+// background, instead of only flashing into view when a direct specular
+// highlight sweeps across it.
 const QLOGO_MATERIAL = {
-  color: "#0a0a0c", // black dark chrome base
-  metalness: 1,
-  roughness: 0.12, // low roughness = sharp chrome highlights
+  color: "#1a1a1a", // dark metallic base — lightened from near-black so it never disappears
+  metalness: 0.8,
+  roughness: 0.15, // low roughness = sharp chrome highlights, still catches ambient fill
   envMapIntensity: 1.6,
 } as const;
 
@@ -97,9 +102,17 @@ function QLogo({ scale = 1 }: { scale?: number }) {
         <meshStandardMaterial {...QLOGO_MATERIAL} />
       </Extrude>
 
-      <ambientLight intensity={0.4} />
+      {/* Lighting: a strong ambient fill keeps the dark-metal mesh readable
+          as a visible silhouette at every rotation angle (previously too low,
+          so the logo went nearly invisible except when a specular highlight
+          swept across it), plus two rim lights positioned top-left and
+          bottom-right so the beveled edges continuously catch a highlight
+          as the logo spins, instead of only lighting up briefly. */}
+      <ambientLight intensity={0.8} />
       <directionalLight position={[3, 4, 5]} intensity={1.2} />
       <directionalLight position={[-3, -2, 2]} intensity={0.5} />
+      <directionalLight position={[-4, 4, 3]} intensity={1.1} />
+      <directionalLight position={[4, -4, 3]} intensity={1.1} />
     </group>
   );
 }
