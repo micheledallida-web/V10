@@ -455,7 +455,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <a href="#" className="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-brandGreen/40 rounded-full px-2" aria-label="QuickStart.Ai Homepage">
             <div className="w-10 h-10 relative overflow-hidden flex items-center justify-center"><Q3DCanvas scale={0.85} className="w-10 h-10 absolute pointer-events-none" /></div>
-            <span className="text-xl font-bold tracking-tight"><span className="wordmark-quickstart">QuickStart</span><span className="wordmark-ai">.Ai</span></span>
+            <span className="text-xl font-bold tracking-tight"><span className="wordmark-quickstart metal-shimmer">QuickStart</span><span className="wordmark-ai">.Ai</span></span>
           </a>
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-brandTextSec">
             <a href="#features" className="hover:text-white transition-colors duration-200">Features</a>
@@ -483,7 +483,7 @@ export default function LandingPage() {
             <Q3DCanvas scale={1.5} className="w-full h-full" />
           </div>
           <div className="max-w-4xl text-center mx-auto mt-2 z-20 reveal-element active">
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tighter leading-[1.05] text-white">Build Full-Stack<br /><span className="text-brandGreen">Web & Mobile Apps in Minutes</span></h1>
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tighter leading-[1.05] text-white"><span className="metal-shimmer">Build Full-Stack</span><br /><span className="text-brandGreen">Web & Mobile Apps in Minutes</span></h1>
           </div>
           <div id="signup" className="w-full max-w-md mx-auto mt-8 z-20 reveal-element active space-y-6">
             <ProviderButton loadingLabel="Authorization Pending..." onProviderAuth={handleProviderAuth} provider="Google" className="w-full inline-flex items-center justify-center gap-2 bg-white text-black py-4 px-6 rounded-pill text-base font-semibold transition-all duration-300 hover:bg-brandGreen hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-brandGreen/40 shadow-lg group">
