@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import type { Provider } from "@supabase/supabase-js";
 import LoginModal, { FacebookIcon, GoogleIcon, PROVIDER_ICON_CLASS, ProviderButton } from "./LoginModal";
 import Q3DCanvas from "./Q3DCanvas";
-import { createSupabaseBrowserClient, isSupabaseConfigured } from "@/lib/supabase";
+import { createSupabaseBrowserClient, getMissingSupabaseEnvVars, isSupabaseConfigured } from "@/lib/supabase";
 import {
   Zap,
   Layout,
@@ -298,10 +298,7 @@ export default function LandingPage() {
   /** Returns a configured Supabase client, or null with an alert if env vars are missing. */
   function getSupabaseOrWarn() {
     if (!isSupabaseConfigured) {
-      const missing = [
-        !process.env.NEXT_PUBLIC_SUPABASE_URL && "NEXT_PUBLIC_SUPABASE_URL",
-        !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY && "NEXT_PUBLIC_SUPABASE_ANON_KEY",
-      ].filter(Boolean);
+      const missing = getMissingSupabaseEnvVars();
       // eslint-disable-next-line no-console
       console.error(
         `Supabase is not configured: missing environment variable(s): ${missing.join(", ")}. ` +

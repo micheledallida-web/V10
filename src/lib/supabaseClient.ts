@@ -18,14 +18,18 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
 
-if (!isSupabaseConfigured) {
-  const missing = [
+/** Returns the names of the required Supabase env vars that are missing/undefined. */
+export function getMissingSupabaseEnvVars(): string[] {
+  return [
     !supabaseUrl && "NEXT_PUBLIC_SUPABASE_URL",
     !supabaseAnonKey && "NEXT_PUBLIC_SUPABASE_ANON_KEY",
-  ].filter(Boolean);
+  ].filter((value): value is string => Boolean(value));
+}
+
+if (!isSupabaseConfigured) {
   // eslint-disable-next-line no-console
   console.error(
-    `Supabase client is not configured: missing environment variable(s): ${missing.join(", ")}. ` +
+    `Supabase client is not configured: missing environment variable(s): ${getMissingSupabaseEnvVars().join(", ")}. ` +
       "Auth and database calls will fall back to local storage until these are set.",
   );
 }
