@@ -8,7 +8,7 @@ function createQGeometry() {
 
   const silverPBRMaterial = new THREE.MeshPhysicalMaterial({
     color: 0xd7dbe2,
-    emissive: 0x081109,
+    emissive: 0x0a0a0a,
     emissiveIntensity: 0.22,
     metalness: 0.9,
     roughness: 0.08,

@@ -169,7 +169,7 @@ export default function LoginModal({ isOpen, onClose, onProviderAuth, onEmailSig
 
   const spinningQ = (
     <div className="flex justify-center">
-      <div className="h-[4.5rem] w-[4.5rem] rounded-full bg-[radial-gradient(circle_at_30%_25%,rgba(255,255,255,0.18),rgba(255,255,255,0.02)_48%,transparent_72%)] shadow-[0_18px_40px_rgba(0,0,0,0.28)] sm:h-[5.25rem] sm:w-[5.25rem]">
+      <div className="q-logo-backdrop h-[4.5rem] w-[4.5rem] sm:h-[5.25rem] sm:w-[5.25rem]">
         <Q3DCanvas className="h-full w-full" scale={0.82} />
       </div>
     </div>
