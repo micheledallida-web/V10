@@ -29,7 +29,8 @@ function createQGeometry() {
   const extrudeSettings = {
     depth: 0.5,
     bevelEnabled: true,
-    bevelSegments: 24,
+    bevelSegments: 32,
+    curveSegments: 128, // fixes the faceted/low-poly look — was defaulting to 12
     steps: 2,
     bevelSize: 0.06,
     bevelThickness: 0.06,
@@ -40,10 +41,12 @@ function createQGeometry() {
   const ringMesh = new THREE.Mesh(ringGeometry, silverPBRMaterial);
   group.add(ringMesh);
 
-  // Tail — flat beveled blade (same stroke width as the ring: 2.0 - 1.35 = 0.65),
-  // continuing out of the ring's lower-right area, instead of a rounded cylinder.
-  const strokeWidth = 0.65;
-  const tailLength = 2.1;
+  // Tail — flat beveled blade, same stroke width as the ring (2.0 - 1.35 = 0.65),
+  // resized and repositioned so it clearly extends from the ring's lower-right
+  // inner edge out past the ring's outer boundary (previously it was mostly
+  // hidden inside the ring's own footprint).
+  const strokeWidth = 0.68;
+  const tailLength = 2.2;
 
   const tailShape = new THREE.Shape();
   tailShape.moveTo(-strokeWidth / 2, 0);
@@ -55,7 +58,8 @@ function createQGeometry() {
   const tailExtrudeSettings = {
     depth: 0.5,
     bevelEnabled: true,
-    bevelSegments: 24,
+    bevelSegments: 32,
+    curveSegments: 128,
     steps: 2,
     bevelSize: 0.06,
     bevelThickness: 0.06,
@@ -64,8 +68,11 @@ function createQGeometry() {
   const tailGeometry = new THREE.ExtrudeGeometry(tailShape, tailExtrudeSettings);
   tailGeometry.center();
   const tailMesh = new THREE.Mesh(tailGeometry, silverPBRMaterial);
-  tailMesh.rotation.z = -Math.PI / 4;
-  tailMesh.position.set(1.05, -1.05, 0);
+  // Angled and positioned so the inner end tucks behind the ring's lower-right
+  // inner edge, and the outer tip extends clearly past the ring's outer radius —
+  // matching the reference photo's proportions.
+  tailMesh.rotation.z = -0.88; // ~ -50 degrees
+  tailMesh.position.set(1.65, -1.95, 0);
   group.add(tailMesh);
 
   return group;
@@ -85,8 +92,6 @@ export default function Q3DCanvas({ scale = 1, className = "" }: { scale?: numbe
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.0;
 
-    // Environment map for real chrome reflections — this is what gives the
-    // bright sweeping highlight bands instead of a flat/dull metal look.
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
     pmremGenerator.dispose();
@@ -104,8 +109,6 @@ export default function Q3DCanvas({ scale = 1, className = "" }: { scale?: numbe
     keyLight.position.set(5, 5, 4);
     scene.add(keyLight);
 
-    // Toned down so the metal reads as neutral chrome with just a hint of
-    // brand color at the rim, instead of tinting the whole surface green.
     const accentGreenRimLight = new THREE.DirectionalLight(0x8ef08a, 0.35);
     accentGreenRimLight.position.set(-6, -6, -4);
     scene.add(accentGreenRimLight);
