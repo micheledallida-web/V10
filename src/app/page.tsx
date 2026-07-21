@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import type { Provider } from "@supabase/supabase-js";
 import LoginModal, { FacebookIcon, GoogleIcon, PROVIDER_ICON_CLASS, ProviderButton } from "./LoginModal";
 import Q3DCanvas from "./Q3DCanvas";
-import { createSupabaseBrowserClient, isSupabaseConfigured } from "@/lib/supabase";
+import { createSupabaseBrowserClient, describeMissingSupabaseEnvVars, isSupabaseConfigured } from "@/lib/supabase";
 import {
   Zap,
   Layout,
@@ -298,47 +298,83 @@ export default function LandingPage() {
   /** Returns a configured Supabase client, or null with an alert if env vars are missing. */
   function getSupabaseOrWarn() {
     if (!isSupabaseConfigured) {
+      // eslint-disable-next-line no-console
+      console.error(describeMissingSupabaseEnvVars());
       alert("Authentication is currently unavailable. Please try again later or contact support.");
       return null;
     }
-    return createSupabaseBrowserClient();
+    try {
+      return createSupabaseBrowserClient();
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to create Supabase browser client:", error);
+      alert("Authentication is currently unavailable. Please try again later or contact support.");
+      return null;
+    }
   }
 
   async function handleProviderAuth(provider: string) {
     const supabase = getSupabaseOrWarn();
     if (!supabase) return;
-    await supabase.auth.signInWithOAuth({
-      provider: provider.toLowerCase() as Provider,
-      options: { redirectTo: `${window.location.origin}/dashboard` },
-    });
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: provider.toLowerCase() as Provider,
+        options: { redirectTo: `${window.location.origin}/dashboard` },
+      });
+      if (error) {
+        // eslint-disable-next-line no-console
+        console.error("Supabase OAuth sign-in error:", error);
+        alert(error.message);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Unexpected error during OAuth sign-in:", error);
+      alert("Authentication is currently unavailable. Please try again later or contact support.");
+    }
   }
 
   async function handleEmailSignUp(payload: { name: string; email: string; password: string }) {
     const supabase = getSupabaseOrWarn();
     if (!supabase) return;
-    const { error } = await supabase.auth.signUp({
-      email: payload.email,
-      password: payload.password,
-      options: { data: { full_name: payload.name } },
-    });
-    if (error) {
-      alert(error.message);
-    } else {
-      router.push("/dashboard");
+    try {
+      const { error } = await supabase.auth.signUp({
+        email: payload.email,
+        password: payload.password,
+        options: { data: { full_name: payload.name } },
+      });
+      if (error) {
+        // eslint-disable-next-line no-console
+        console.error("Supabase sign-up error:", error);
+        alert(error.message);
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Unexpected error during sign-up:", error);
+      alert("Authentication is currently unavailable. Please try again later or contact support.");
     }
   }
 
   async function handleEmailSignIn(payload: { email: string; password: string }) {
     const supabase = getSupabaseOrWarn();
     if (!supabase) return;
-    const { error } = await supabase.auth.signInWithPassword({
-      email: payload.email,
-      password: payload.password,
-    });
-    if (error) {
-      alert(error.message);
-    } else {
-      router.push("/dashboard");
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: payload.email,
+        password: payload.password,
+      });
+      if (error) {
+        // eslint-disable-next-line no-console
+        console.error("Supabase sign-in error:", error);
+        alert(error.message);
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Unexpected error during sign-in:", error);
+      alert("Authentication is currently unavailable. Please try again later or contact support.");
     }
   }
 
@@ -352,9 +388,17 @@ export default function LandingPage() {
       return;
     }
     const phone = `${dialCode}${localNumber}`;
-    const { error } = await supabase.auth.signInWithOtp({ phone });
-    if (error) {
-      alert(error.message);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({ phone });
+      if (error) {
+        // eslint-disable-next-line no-console
+        console.error("Supabase phone sign-in error:", error);
+        alert(error.message);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Unexpected error during phone sign-in:", error);
+      alert("Authentication is currently unavailable. Please try again later or contact support.");
     }
   }
 
